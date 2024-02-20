@@ -1,0 +1,55 @@
+.TH "BATMAN" 1
+.SH NAME
+batman - Read system manual pages (\fR\fIman\fR) using \fR\fIbat\fR as the manual page formatter.
+.SH DESCRIPTION
+.P
+Gone are the days of losing your place while reading through monotone manual pages. With \fR\fIbat\fR and \fR\fIbatman\fR, you can read \fR\fIman ifconfig\fR with beautiful 24-bit color and syntax higlighting.
+.P
+If you have \fR\fIfzf\fR installed, you can even use \fR\fIbatman\fR to search through manual pages!
+.SH "USAGE"
+.P
+    batman [SECTION] [ENTRY]
+.SH "ENVIRONMENT"
+.TS
+tab(|) box;
+| cB | cB |
+| _ | _ |
+| l0 |1 l |.
+ Variable | Description 
+|
+.SP
+ \fR\fIMANPAGER\fR | Changes the pager used for \fR\fIbatman\fR. This is treated like \fR\fIBAT_PAGER\fR, but only affects this command. 
+.TE
+
+.SH "CUSTOMIZATION"
+.SS "Changing the Theme"
+.P
+You can change the syntax highlighting theme for \fR\fIbatman\fR by setting the \fR\fIBAT_THEME\fR environment variable before calling \fR\fIbatman\fR. The following wrapper function will change the theme to \fR\fISolarized (dark)\fR without affecting any other \fR\fIbat\fR command.
+.P
+\fR\fI\fR\fR\fIbash
+.br
+batman() {
+.br
+    BAT_THEME="Solarized (dark)" batman "$@"
+.br
+    return $?
+.br
+}
+.br
+\fR\fI\fR\fR\fI
+.SH "CAVEATS"
+.P
+\fR\fBFlags aren't highlighted:\fR
+.P
+- This happens when you change \fR\fIbat\fR's theme through \fR\fIbat\fR's config file or the \fR\fIBAT_THEME\fR environment variable. Not all themes provide colours for flags, and it's a known issue.
+.br
+- You can overriding the theme for \fR\fIbatman\fR by wrapping it in a function that sets \fR\fIBAT_THEME\fR.
+.br
+- The following themes support manpage highlighting:
+.br
+  - \fR\fIMonokai Extended\fR / \fR\fI\fRMonokai Extended Light\fR\fI
+.br
+  - \fR\fISolarized (dark)\fR / \fR\fISolarized (light)\fR
+.SH "ACKNOWLEDGEMENTS"
+.P
+Thanks to @sharkdp and @LunarLambda for debugging how to make this work properly in certain environments.
