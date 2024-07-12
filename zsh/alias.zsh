@@ -61,6 +61,8 @@ alias zre='source "${ZDOTDIR}/.zshrc"'
 alias zed='vim "${ZDOTDIR}/.zshrc"'
 alias ved='vim "${VIMDIR}/vimrc"'
 
+alias zalias='vim "${ZDOTDIR}/alias.zsh"'
+
 
 alias tm='tmux'
 alias tma='tm attach-session'
@@ -69,3 +71,11 @@ alias tmks='tm kill-session -a'
 alias tml='tm list-sessions'
 alias tmn='tm new-session'
 alias tmns='tmn -s'
+
+
+alias cdc='cd /mnt/c/'
+alias cdd='cd /mnt/d/'
+
+
+# WSL
+alias exploer='explorer.exe .'
