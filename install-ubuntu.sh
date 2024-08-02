@@ -14,7 +14,7 @@ set -e
 [ -z "$DOTBOT_BIN" ]            && export DOTBOT_BIN="${DOTBOT_DIR}/bin/dotbot"
 [ -z "$DOTBOT_CONFIG" ]         && export DOTBOT_CONFIG="${DOTFILES}/install.conf.yaml"
 
-PACKAGES_UBUNTU="dialog readline-common apt-utils ssh curl wget sudo bash zsh git vim locales tzdata ca-certificates gnupg python3-minimal"
+PACKAGES_UBUNTU="dialog readline-common apt-utils ssh curl wget sudo bash zsh git vim locales tzdata ca-certificates gnupg python3-minimal zoxide ripgrep"
 
 set -u
 
