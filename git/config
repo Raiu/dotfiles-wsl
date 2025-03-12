@@ -1,0 +1,38 @@
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[user]
+	name = Raiu
+	email = 1299835+Raiu@users.noreply.github.com
+[core]
+	editor = vim
+	autocrlf = input
+[init]
+	defaultBranch = main
+[color]
+	ui = auto
+[alias]
+	st = status
+	co = checkout
+	br = branch
+	ci = commit
+	aa = add .
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	last = log -1 HEAD
+	unstage = reset HEAD --    
+    graph = log --oneline --graph --decorate
+    amend = commit --amend --no-edit
+    undo = reset HEAD~1 --soft
+    discard = checkout -- .
+[pull]
+	rebase = true
+[fetch]
+	prune = true
+[push]
+	default = simple
+[rebase]
+	autostash = true
+	autosquash = true

@@ -103,7 +103,7 @@ __shiftopt_hook__version(){
 if [[ $OPT == "--version" ]];then
 printf "%s %s\n\n%s\n%s\n" \
 "prettybat" \
-"2024.02.12" \
+"2024.08.24" \
 "Copyright (C) 2019-2021 eth-p | MIT License" \
 "https://github.com/eth-p/bat-extras"
 exit 0
@@ -229,6 +229,20 @@ print_error "%s: Not a file" "$1"
 return 1
 }
 # --- END LIBRARY FILE ---
+# --- BEGIN LIBRARY FILE: term.sh ---
+term_width(){
+local width="$({ stty size 2>/dev/null||echo "22 80";}|cut -d ' ' -f2)"
+if [[ $width -ne 0 ]];then
+echo "$width"
+else
+echo "80"
+fi
+return 0
+}
+term_clear(){
+printf "\x1B[3J\x1B[2J\x1B[H"
+}
+# --- END LIBRARY FILE ---
 # -----------------------------------------------------------------------------
 # Init:
 # -----------------------------------------------------------------------------
@@ -237,7 +251,10 @@ hook_version
 # Formatters:
 # -----------------------------------------------------------------------------
 
-FORMATTERS=("prettier" "rustfmt" "shfmt" "clangformat" "black", "mix_format")
+FORMATTERS=(
+	"yq" "prettier" "rustfmt" "shfmt" "clangformat"
+	"black" "mix_format" "column"
+)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -353,6 +370,76 @@ formatter_mix_format_process() {
 	return $?
 }
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+formatter_column_supports() {
+	case "$1" in
+		.tsv)
+		return 0
+		;;
+	esac
+
+	return 1
+}
+
+formatter_column_process() {
+	local needs_newline=true
+	local args=(
+		-t
+		-s $'\t'
+		-c "$TERMINAL_WIDTH"
+	)
+
+	if column --help &>/dev/null; then
+		# GNU `column`
+		args+=(--keep-empty-lines)
+		needs_newline=false
+	fi
+
+	{ { "$needs_newline" && sed 's/$/\n/'; } || cat; } | column "${args[@]}"
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+formatter_yq_supports__version_ok() {
+	local yq_version
+	yq_version=$(yq --version | sed 's/^.* version v//')
+
+	# If it's older than yq version 4, replace the functions to save processing.
+	if version_compare "$yq_version" -lt 4.0; then
+		formatter_yq_supports() { return 1; }
+		formatter_yq_supports__version_ok() { return 1; }
+		return 1
+	fi
+
+	# It's supported.
+	formatter_yq_supports__version_ok() { return 0; }
+	return 0
+}
+
+formatter_yq_supports() {
+	case "$1" in
+		.yaml | yml | \
+		.json)
+		formatter_yq_supports__version_ok
+		return $?
+		;;
+	esac
+
+	return 1
+}
+
+formatter_yq_process() {
+	local args=()
+	case "$1" in
+		*.json) args+=(--output-format json) ;;
+	esac
+
+	yq --prettyPrint --indent 4 "${args[@]}" \
+		| sed -e ':l' -e 's/^\(\t*\)    /\1\t/g; t l'
+	return $?
+}
+
 # -----------------------------------------------------------------------------
 # Functions:
 # -----------------------------------------------------------------------------
@@ -382,6 +469,7 @@ map_language_to_extension() {
 	python | py)                ext=".py" ;;
 	elixir | ex)                ext=".ex" ;;
 	exs)                        ext=".exs" ;;
+	tsv)                        ext=".tsv" ;;
 	esac
 
 	echo "$ext"
@@ -508,6 +596,8 @@ BAT_ARGS=()
 OPT_LANGUAGE=
 FILES=()
 DEBUG_PRINT_FORMATTER=false
+
+TERMINAL_WIDTH="$(term_width)"
 
 # Parse arguments.
 while shiftopt; do

@@ -6,23 +6,20 @@
 
 - clean: ["~"]
 
-- create:
-    - ~/.config/vim
-    - ~/.config/zsh
-    - ~/.config/ripgrep
-    - ~/.config/tmux
-    - ~/.local/bin
-
 - link:
     ~/.zshenv:
       if: '! grep -q "XDG_CONFIG_HOME" /etc/zsh/zshenv'
-      path: zsh/.zshenv
-    ~/.config/zsh/.zshrc: zsh/.zshrc
+      path: zsh/zshenv
     ~/.config/zsh/: zsh/**
-    ~/.config/vim/: vim/**
-    ~/.config/tmux/: tmux/**
+    ~/.config/zsh/.zshrc: zsh/zshrc
+    ~/.config/git/: git/**
+    ~/.config/nvim/: nvim/**
     ~/.config/ripgrep/rg.conf: ripgrep/rg.conf
-    ~/.local/bin/: bin/bin/*
+    ~/.config/tmux/: tmux/**
+    ~/.config/vim/: vim/**
+    ~/.local/bin/: bin/bin/**
+    ~/.local/share/man/: bin/man/**
+    ~/.local/share/zsh/site-functions/: bin/completion/**
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]

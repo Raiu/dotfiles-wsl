@@ -1,0 +1,29 @@
+#######################################
+#   VARIABLES & DIR
+#######################################
+
+: "${ZDOTDIR:="${XDG_CONFIG_HOME}/zsh"}"
+: "${ZCACHEDIR:="${XDG_CACHE_HOME}/zsh"}"
+: "${ZSTATEDIR:="${XDG_STATE_HOME}/zsh"}"
+[[ ! -d "${ZCACHEDIR}" ]] && mkdir -p "${ZCACHEDIR}"
+[[ ! -d "${ZSTATEDIR}" ]] && mkdir -p "${ZSTATEDIR}"
+
+#######################################
+#   HELPERS
+#######################################
+
+_src() {
+    [[ ! -f "$1" ]] && echo "Error: Not a regular file: '$1'" >&2 && return 1
+    source "$1" || echo "Error: Failed to source file: '$1' (Status: $?)" >&2
+}
+
+#######################################
+#   SOURCE ZSH
+#######################################
+
+_src "${ZDOTDIR}/plugin.zsh"
+_src "${ZDOTDIR}/core.zsh"
+_src "${ZDOTDIR}/tool.zsh"
+_src "${ZDOTDIR}/function.zsh"
+_src "${ZDOTDIR}/alias.zsh"
+_src "${ZDOTDIR}/keymap.zsh"

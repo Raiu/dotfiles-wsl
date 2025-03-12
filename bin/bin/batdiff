@@ -310,7 +310,7 @@ __shiftopt_hook__version(){
 if [[ $OPT == "--version" ]];then
 printf "%s %s\n\n%s\n%s\n" \
 "batdiff" \
-"2024.02.12" \
+"2024.08.24" \
 "Copyright (C) 2019-2021 eth-p | MIT License" \
 "https://github.com/eth-p/bat-extras"
 exit 0
@@ -534,8 +534,8 @@ print_bat_diff() {
 
 	# Diff git file.
 	if "$SUPPORTS_BAT_DIFF"; then
-		"git" diff "${GIT_ARGS[@]}" --name-only "${files[0]}" \
-			| xargs "bat" --diff --diff-context="$OPT_CONTEXT" "${BAT_ARGS[@]}"
+		"git" diff "${GIT_ARGS[@]}" --name-only -z "${files[0]}" \
+			| xargs --null "bat" --diff --diff-context="$OPT_CONTEXT" "${BAT_ARGS[@]}"
 	else
 		"git" diff "${GIT_ARGS[@]}" "${files[0]}" | "bat" --language=diff - "${BAT_ARGS[@]}"
 	fi

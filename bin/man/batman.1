@@ -9,6 +9,23 @@ If you have \fR\fIfzf\fR installed, you can even use \fR\fIbatman\fR to search t
 .SH "USAGE"
 .P
     batman [SECTION] [ENTRY]
+.SS "As a Replacement for Man"
+.P
+With bash:
+.P
+\fR\fI\fR\fR\fIbash
+.br
+eval "$(batman --export-env)"
+.br
+\fR\fI\fR\fR\fI
+.P
+With fish:
+.P
+\fR\fI\fR\fR\fIfish
+.br
+batman --export-env | source
+.br
+\fR\fI\fR\fR\fI
 .SH "ENVIRONMENT"
 .TS
 tab(|) box;
