@@ -1,0 +1,21 @@
+zmodload zsh/zprof
+
+_exist() { command -v $1 >/dev/null 2>&1; }
+
+[[ ! -d "${XDG_STATE_HOME}/zsh" ]] && mkdir -p "${XDG_STATE_HOME}/zsh"
+[[ ! -d "${XDG_CACHE_HOME}/zsh" ]] && mkdir -p "${XDG_CACHE_HOME}/zsh"
+[[ -e "${ZDOTDIR}/export.zsh" ]] && source "${ZDOTDIR}/export.zsh"
+[[ -e "${ZDOTDIR}/config.zsh" ]] && source "${ZDOTDIR}/config.zsh"
+[[ -e "${ZDOTDIR}/antidote.zsh" ]] && source "${ZDOTDIR}/antidote.zsh"
+[[ -e "${ZDOTDIR}/prompt.zsh" ]] && source "${ZDOTDIR}/prompt.zsh"
+[[ -e "${ZDOTDIR}/vim.zsh" ]] && source "${ZDOTDIR}/vim.zsh"
+[[ -e "${ZDOTDIR}/tmux.zsh" ]] && source "${ZDOTDIR}/tmux.zsh"
+[[ -e "${ZDOTDIR}/alias.zsh" ]] && source "${ZDOTDIR}/alias.zsh"
+[[ -e "${ZDOTDIR}/keymap.zsh" ]] && source "${ZDOTDIR}/keymap.zsh"
+
+
+zprof
+
+#export NVM_DIR="$HOME/.config/nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"

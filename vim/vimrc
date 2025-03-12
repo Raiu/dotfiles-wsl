@@ -1,6 +1,3 @@
-" XDG
-" https://blog.joren.ga/vim-xdg
-"""""
 if empty($XDG_CACHE_HOME)   | let $XDG_CACHE_HOME   = $HOME."/.cache"           | endif
 if empty($XDG_CONFIG_HOME)  | let $XDG_CONFIG_HOME  = $HOME."/.config"          | endif
 if empty($XDG_DATA_HOME)    | let $XDG_DATA_HOME    = $HOME."/.local/share"     | endif
@@ -21,27 +18,6 @@ set undodir=$XDG_STATE_HOME/vim/undo     | call mkdir(&undodir,   'p', 0700)
 set viewdir=$XDG_STATE_HOME/vim/view     | call mkdir(&viewdir,   'p', 0700)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"           https://github.com/amix/vimrc
-"
-" Sections:
-"    -> Plugins
-"    -> General
-"    -> VIM user interface
-"    -> Colors and Fonts
-"    -> Files and backups
-"    -> Text, tab and indent related
-"    -> Visual mode related
-"    -> Moving around, tabs and buffers
-"    -> Status line
-"    -> Editing mappings
-"    -> vimgrep searching and cope displaying
-"    -> Spell checking
-"    -> Misc
-"    -> Helper functions
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible
@@ -50,6 +26,7 @@ filetype off
 " set the runtime path to include Vundle and initialize
 set runtimepath+=$VIMDIR/bundle/Vundle.vim
 call vundle#begin("$VIMDIR/bundle")
+Plugin 'dense-analysis/ale'
 Plugin 'scrooloose/nerdtree'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'tpope/vim-fugitive'
@@ -90,88 +67,54 @@ autocmd! BufWritePost $MYVIMRC source $MYVIMRC | echom "Reloaded $MYVIMRC"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Set 7 lines to the cursor - when moving vertically using j/k
-set so=7
+set so=7    " Set 7 lines to the cursor - when moving vertically using j/k
 
-" Avoid garbled characters in Chinese language windows OS
-let $LANG='en'
-set langmenu=en
+let $LANG='en'  " Avoid garbled characters in Chinese language windows OS
+set langmenu=en "
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
-
-" Turn on the Wild menu
-set wildmenu
-
-" Ignore compiled files
-set wildignore=*.o,*~,*.pyc
+set wildmenu    " Turn on the Wild menu
+set wildignore=*.o,*~,*.pyc     
 if has("win16") || has("win32")
     set wildignore+=.git\*,.hg\*,.svn\*
 else
     set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 endif
 
-" Always show current position
-set ruler
-
-" Height of the command bar
-set cmdheight=1
-
-" A buffer becomes hidden when it is abandoned
-set hid
-
-" Configure backspace so it acts as it should act
-set backspace=eol,start,indent
-set whichwrap+=<,>,h,l
-
-" Ignore case when searching
-set ignorecase
-
-" When searching try to be smart about cases
-set smartcase
-
-" Highlight search results
-set hlsearch
-
-" Makes search act like search in modern browsers
-set incsearch
-
-" Toggle hl with F5
-nnoremap <F5> :set hlsearch!<CR>
-
-" Don't redraw while executing macros (good performance config)
-set lazyredraw
-
-" For regular expressions turn magic on
-set magic
-
-" Show matching brackets when text indicator is over them
-set showmatch
-
-" How many tenths of a second to blink when matching brackets
-set mat=2
-
-" No annoying sound on errors
-set noerrorbells
-set novisualbell
-set t_vb=
-set tm=500
+set ruler   " Always show current position
+set cmdheight=1     " Height of the command bar
+set hid     " A buffer becomes hidden when it is abandoned
+set backspace=eol,start,indent  " Configure backspace so it acts as it should act
+set whichwrap+=<,>,h,l          "
+set ignorecase  " Ignore case when searching
+set smartcase   " When searching try to be smart about cases
+set hlsearch    " Highlight search results
+set incsearch   " Makes search act like search in modern browsers
+nnoremap <F5> :set hlsearch!<CR>    " Toggle hl with F5
+set lazyredraw  " Don't redraw while executing macros (good performance config)
+set magic   " For regular expressions turn magic on
+set showmatch   " Show matching brackets when text indicator is over them
+set mat=2   " How many tenths of a second to blink when matching brackets
+set ttymouse=xterm2 " Mouse
+set mouse=a         "
+set noerrorbells    " No annoying sound on errors
+set novisualbell    "
+set t_vb=           "
+set tm=500          "
 
 " Properly disable sound on errors on MacVim
-if has("gui_macvim")
+if has("gui_macvim") 
     autocmd GUIEnter * set vb t_vb=
 endif
 
-" Add a bit extra margin to the left
-set foldcolumn=1
+set foldcolumn=1    " Add a bit extra margin to the left
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Enable syntax highlighting
-syntax enable
+syntax enable   " Enable syntax highlighting
 
-" Set regular expression engine automatically
-set regexpengine=0
+set regexpengine=0  " Set regular expression engine automatically
 
 " Enable 256 colors palette in Gnome Terminal
 if $COLORTERM == 'gnome-terminal'
@@ -208,6 +151,56 @@ set encoding=utf8
 set ffs=unix,dos,mac
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => ALE LSP
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:ale_enabled = 1   " Enable ALE
+let g:ale_sign_column_always = 1    " Show errors and warnings in the gutter
+let g:ale_fix_on_save = 1   " Automatically fix files when saving (if possible)
+" Configure linters and fixers for specific file types
+" Python:
+let g:ale_linters = {
+\   'python': ['flake8', 'pylint'],
+\}
+let g:ale_fixers = {
+\   'python': ['black'],
+\}
+
+" Typescript/Javascript
+let g:ale_linters = {
+\   'typescript': ['eslint'],
+\   'javascript': ['eslint']
+\}
+let g:ale_fixers = {
+\   'typescript': ['prettier'],
+\   'javascript': ['prettier']
+\}
+
+" C#
+let g:ale_linters = {
+\   'cs': ['dotnet_roslyn'],
+\}
+let g:ale_fixers = {
+\   'cs': ['dotnet_format'],
+\}
+
+" Java
+let g:ale_linters = {
+\   'java': ['checkstyle'],
+\}
+let g:ale_fixers = {
+\   'java': ['google_java_format'],
+\}
+
+" LSP servers
+let g:ale_lsp_servers = {
+\   'python': ['pyright'],
+\   'typescript': ['tsserver'],
+\   'cs': ['omnisharp'],
+\   'java': ['jdtls'],
+\}
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backups and undo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Turn backup off, since most stuff is in SVN, git etc. anyway...
@@ -218,29 +211,20 @@ set noswapfile
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Use spaces instead of tabs
-set expandtab
-
-" Be smart when using tabs ;)
-set smarttab
-
-" 1 tab == 4 spaces
-set shiftwidth=4
-set tabstop=4
-
-" Linebreak on 500 characters
-set lbr
-set tw=500
-
-set ai "Auto indent
-set si "Smart indent
-set wrap "Wrap lines
+set expandtab   " Use spaces instead of tabs
+set smarttab    " Be smart when using tabs ;)
+set shiftwidth=4    " 1 tab == 4 spaces
+set tabstop=4       "
+set lbr     " Linebreak on 500 characters
+set tw=500  "
+set ai  "Auto indent
+set si  "Smart indent
+set wrap    "Wrap lines
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
 """"""""""""""""""""""""""""""
 " Visual mode pressing * or # searches for the current selection
-" Super useful! From an idea by Michael Naumann
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 
@@ -302,8 +286,7 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 """"""""""""""""""""""""""""""
 " => Status line
 """"""""""""""""""""""""""""""
-" Always show the status line
-set laststatus=2
+set laststatus=2 " Always show the status line
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Editing mappings
