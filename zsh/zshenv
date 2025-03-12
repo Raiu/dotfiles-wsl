@@ -1,7 +1,16 @@
-if [[ -z "$PATH" || "$PATH" == "/bin:/usr/bin" ]]
-then
-        export PATH="/usr/local/bin:/usr/bin:/bin"
-fi
+pp() {
+	rp=$(echo "$1" | tr ':' '\n' | sed '1!G;h;$!d')
+	up=""
+	for d in $(echo "$rp" | tr ':' '\n'); do
+		case ":$up:" in
+		*":$d:"*) ;;
+		*) up="$d${up:+:$up}" ;;
+		esac
+	done
+	echo "$up"
+}
+bp="$PATH:${XDG_BIN_HOME:-${HOME}/.local/bin}:/snap/bin:/usr/local/games:/usr/games:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
+export PATH=$(pp "$bp")
 
 # XDG
 export XDG_CONFIG_HOME="$HOME/.config"

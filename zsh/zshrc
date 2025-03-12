@@ -1,0 +1,24 @@
+# HELPER FUNCTIONS
+###########################
+_exist() { command -v $1 >/dev/null 2>&1; }
+
+[[ -e "${ZDOTDIR}/export.zsh" ]] && source "${ZDOTDIR}/export.zsh"
+[[ ! -d "${XDG_STATE_HOME}/zsh" ]] && mkdir -p "${XDG_STATE_HOME}/zsh"
+[[ ! -d "${XDG_CACHE_HOME}/zsh" ]] && mkdir -p "${XDG_CACHE_HOME}/zsh"
+
+[[ -e "${ZDOTDIR}/config.zsh" ]] && source "${ZDOTDIR}/config.zsh"
+
+# Load plugins
+##########################
+[[ -e "${ZDOTDIR}/antidote" ]] ||
+    git clone "https://github.com/mattmc3/antidote.git" "${ZDOTDIR}/antidote"
+source "${ZDOTDIR}/antidote/antidote.zsh"
+antidote load "${ZDOTDIR}/plugins.list"
+
+[[ -e "${ZDOTDIR}/prompt.zsh" ]] && source "${ZDOTDIR}/prompt.zsh"
+
+_exist "vim" && [[ -e "${ZDOTDIR}/vim.zsh" ]] && source "${ZDOTDIR}/vim.zsh"
+_exist "tmux" && [[ -e "${ZDOTDIR}/tmux.zsh" ]] && source "${ZDOTDIR}/tmux.zsh"
+_exist "nvm" && [[ -e "${ZDOTDIR}/nvm.zsh" ]] && source "${ZDOTDIR}/nvm.zsh"
+
+[[ -e "${ZDOTDIR}/alias.zsh" ]] && source "${ZDOTDIR}/alias.zsh"

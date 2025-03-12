@@ -6,7 +6,7 @@ set -e
 [ -z "$XDG_CACHE_HOME" ]        && export XDG_CACHE_HOME="${HOME}/.cache"
 [ -z "$XDG_DATA_HOME" ]         && export XDG_DATA_HOME="${HOME}/.local/share"
 [ -z "$XDG_STATE_HOME" ]        && export XDG_STATE_HOME="${HOME}/.local/state"
-[ -z "$DOTFILES" ]              && export DOTFILES="${HOME}/.config/dotfiles"
+[ -z "$DOTFILES" ]              && export DOTFILES="${XDG_CONFIG_HOME}/dotfiles"
 [ -z "$DOTFILES_REPO" ]         && export DOTFILES_REPO="Raiu/dotfiles-wsl"
 [ -z "$DOTFILES_REMOTE" ]       && export DOTFILES_REMOTE="https://github.com/${DOTFILES_REPO}.git"
 [ -z "$DOTFILES_BRANCH" ]       && export DOTFILES_BRANCH="main"
